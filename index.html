@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ahorcado</title>
+		<link rel="stylesheet" href="style.css" />
+		<script src="script.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class="title">
+			<img
+				id="logo"
+				src="./resources/logo.png"
+				width="400"
+				height="150"
+				alt="Ahorcado"
+			/>
+		</div>
+		<div class="gameBoard">
+			<button class="reset" id="reset"><img class="reset" src="./resources/reset.png"></button>
+			<div class="image">
+				<img id="image" src="./resources/hangman0.png" />
+			</div>
+			<div class="word" id="word"></div>
+		</div>
+		<div class="keyboard" id="keyboard"></div>
+		<div class="endBoard" id="endBoard" style="display: none"></div>
+	</body>
+</html>
