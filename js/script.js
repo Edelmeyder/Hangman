@@ -1,4 +1,3 @@
-let lives = 1;
 const abc = [
 	"A",
 	"B",
@@ -109,59 +108,63 @@ const words = [
 	"ELECTRICIDAD",
 	"MAGNETISMO",
 ];
-let word, showWord;
+
+let misses;
+let word;
+const keyboard = document.getElementById("keyboard");
+const endBoard = document.getElementById("endBoard");
+const showWord = document.getElementById("word");
+const hangman = document.getElementById("image");
+
+createLetterButtons();
 
 window.addEventListener("DOMContentLoaded", () => {
-	createLetterButtons();
 	startGame();
 	document.getElementById("reset").onclick = reset;
 });
 
 function reset() {
-	// resets the lives and image
-	document.getElementById("image").src = "./resources/hangman0.png";
-	lives = 1;
-	// hides the end board if it was visible
-	document.getElementById("endBoard").style.display = "none";
-	// creates the buttons again to reenable those that were previously used
-	createLetterButtons();
-	// new word
+	// reenables previously used keys
+	const keys = Array.from(keyboard.children);
+	for (const key of keys) {
+		key.disabled = false;
+	}
+	// new game
 	startGame();
 }
 
 // takes one word from the array as the word for the current game
 // and shows a line for each letter of the selected word
 function startGame() {
-	
+	// resets the lives and image
+	hangman.src = "./resources/hangman0.png";
+	misses = 0;
+	// hides the end board if it was visible
+	endBoard.style.display = "none";
+
 	word = words[parseInt(Math.random() * words.length)];
-	showWord = document.getElementById("word");
-	showWord.innerHTML = "";
-	for (let i = 0; i < word.length; i++) {
-		showWord.innerHTML += "-";
-	}
+	showWord.innerText = "-".repeat(word.length);
 }
 
 // creates a button for each letter of the alphabet and inserts it into the keyboard
 function createLetterButtons() {
-	document.getElementById("keyboard").replaceChildren(); // empties previous buttons if there were any
-	let frag = new DocumentFragment();
+	const frag = new DocumentFragment();
 	let button;
 	for (let i = 0; i < abc.length; i++) {
 		button = document.createElement("button");
 		button.onclick = letterPress;
 		button.className = "letterButton";
-		button.innerHTML = abc[i];
+		button.innerText = abc[i];
 		frag.appendChild(button);
 	}
-	document.getElementById("keyboard").appendChild(frag);
+	keyboard.appendChild(frag);
 }
 
 // each time a new letter is pressed disables the corresponding button
 // and calls the checkLetter function
 function letterPress() {
-	this.className = "letterButton pressed";
-	this.onclick = null;
-	checkLetter(this.innerHTML);
+	this.disabled = true;
+	checkLetter(this.innerText);
 }
 
 // if letter is in the word replaces de dashes for the corresponding letter
@@ -174,12 +177,13 @@ function checkLetter(letter) {
 			sW += letter;
 			hit = true;
 		} else {
-			sW += showWord.innerHTML[i];
+			sW += showWord.innerText[i];
 		}
 	}
 	if (hit) {
-		showWord.innerHTML = sW;
+		showWord.innerText = sW;
 	} else {
+		misses++;
 		changeImg();
 	}
 	checkEnd();
@@ -190,28 +194,27 @@ function checkLetter(letter) {
 // end board accordingly 
 function checkEnd() {
 	let end = false;
-	if (!showWord.innerHTML.includes("-")) {
-		document.getElementById("endBoard").innerHTML = "Ganaste!";
-		document.getElementById("endBoard").className = "endBoard win";
+	const wordComplete = !showWord.innerText.includes("-");
+	if (wordComplete) {
+		endBoard.innerText = "Ganaste!";
+		endBoard.className = "endBoard win";
 		end = true;
 	}
-	if (lives === 7) {
-		document.getElementById("endBoard").innerHTML = "Perdiste!";
-		document.getElementById("endBoard").className = "endBoard loose";
+	if (misses === 6) {
+		endBoard.innerText = "Perdiste!";
+		endBoard.className = "endBoard loose";
 		end = true;
 	}
 	if (end) {
-		Array.from(document.querySelectorAll(".letterButton")).forEach(
-			(btn) => {
-				btn.onclick = null;
-			}
-		);
-		document.getElementById("endBoard").style.display = "block";
+		const keys = Array.from(keyboard.children);
+		for (const key of keys) {
+				key.disabled = true;
+		}
+		endBoard.style.display = "block";
 	}
 }
 
 // on each miss, looses a live and updates the hangman images accordingly
 function changeImg() {
-	document.getElementById("image").src = "./resources/hangman" + lives + ".png";
-	lives++;
+	hangman.src = "./resources/hangman" + misses + ".png";
 }
