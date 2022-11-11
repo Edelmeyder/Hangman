@@ -5,7 +5,7 @@ body {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	background-image: url("./resources/background.png");
+	background-image: url("../resources/background.png");
 	justify-content: center;
 	text-align: center;
 }
@@ -76,22 +76,21 @@ body {
 	background-color: #eeeeee22;
 }
 
+.letterButton:disabled {
+	color: black;
+	background-color: #88888888;
+}
+
+.letterButton:disabled:hover {
+	background-color: #88888888;
+}
+
 .letterButton:hover {
-	background-color: azure;
+	background-color: rgba(240, 255, 255, 0.5);
 }
 
 .letterButton:active {
-	background-color: aquamarine;
-}
-
-.pressed {
-	background-color: #88888888;
-}
-.pressed:hover {
-	background-color: #88888888;
-}
-.pressed:active {
-	background-color: #88888888;
+	background-color: rgba(127, 255, 212, 0.5);
 }
 
 #logo {
